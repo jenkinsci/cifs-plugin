@@ -1,0 +1,33 @@
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+
+  <j:set var="helpURL" value="/plugin/cifspublisher" />
+  
+  <f:entry title="CIFS Share">
+    <select class="setting-input" name="cifs.shareName" description="Select configured CIFS share. Check global hudson config for defining connection properties for shares">
+      <j:forEach var="s" items="${descriptor.shares}">
+        <f:option selected="${s.displayUrl==instance.displayUrl}">${s.displayUrl}</f:option>
+      </j:forEach>
+    </select>
+  </f:entry>
+
+  <f:entry title="Files to upload">
+    <f:repeatable var="e" items="${instance.entries}">
+      <table width="100%">
+        <f:entry title="Source" help="${helpURL}/help-source.html">
+          <input class="setting-input" name="cifs.entry.sourceFile"
+            type="text" value="${e.sourceFile}" />
+        </f:entry>
+        <f:entry title="Destination" help="${helpURL}/help-destination.html">
+          <input class="setting-input" name="cifs.entry.filePath"
+            type="text" value="${e.filePath}" />
+        </f:entry>
+        <f:entry title="">
+          <div align="right">
+            <f:repeatableDeleteButton />
+          </div>
+        </f:entry>
+      </table>
+    </f:repeatable>
+  </f:entry>
+  
+</j:jelly>
