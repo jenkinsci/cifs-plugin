@@ -287,7 +287,7 @@ public class CIFSPublisher extends Notifier {
 			
 			CIFSShare share = new CIFSShare(server, request.getParameter("port"), request.getParameter("timeOut"), user,
 			    password, domain);
-			share.setShareDir(request.getParameter("shareDir"));
+			share.setShareName(request.getParameter("shareDir"));
 			try {
 				NtlmPasswordAuthentication auth = new NtlmPasswordAuthentication(domain, 
 						user, password);

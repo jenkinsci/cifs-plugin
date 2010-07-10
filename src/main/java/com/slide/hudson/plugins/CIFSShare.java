@@ -11,20 +11,17 @@ import java.util.Map;
 
 import jcifs.smb.SmbFile;
 
- 
-
-
 /**
  * <p>
  * This class
  * </p>
  * <p>
- * HeadURL: $HeadURL: http://z-bld-02:8080/zxdev/zxant_test_environment/trunk/formatting/codeTemplates.xml $<br />
- * Date: $Date: 2008-04-22 11:53:34 +0200 (Di, 22 Apr 2008) $<br />
- * Revision: $Revision: 2451 $<br />
+ * HeadURL: $HeadURL$<br />
+ * Date: $Date$<br />
+ * Revision: $Revision$<br />
  * </p>
  * 
- * @author $Author: ZANOX-COM\fit $
+ * @author $Author$
  */
 public class CIFSShare {
 
@@ -50,7 +47,7 @@ public class CIFSShare {
 	private String domain;
 
 	/** The CIFS dir. */
-	private String shareDir = "/";
+	private String shareName = "/";
 
 	/**
 	 * Instantiates a new FTP site.
@@ -85,7 +82,7 @@ public class CIFSShare {
 		this.username = username;
 		this.password = password;
 		this.domain = domain;
-		this.shareDir = cifsDir;
+		this.shareName = cifsDir;
 	}
 
 	/**
@@ -249,21 +246,21 @@ public class CIFSShare {
 	 * 
 	 * @return the SMB share dir
 	 */
-	public String getShareDir() {
-		return shareDir;
+	public String getShareName() {
+		return shareName;
 	}
 
 	/**
-	 * Sets the ftp dir.
+	 * Sets the share dir.
 	 * 
-	 * @param rootRepositoryPath
-	 *          the new ftp dir
+	 * @param shareName
+	 *          the new share dir
 	 */
-	public void setShareDir(String sharePath) {		
-		while(shareDir.startsWith("/") && shareDir.length() > 1) {
-			shareDir = shareDir.substring(1);
+	public void setShareName(String shareName) {		
+		while(shareName.startsWith("/") && shareName.length() > 1) {
+			shareName = shareName.substring(1);
 		}
-		this.shareDir = sharePath.trim();
+		this.shareName = shareName.trim();
 	}
 	
 	/**
@@ -305,10 +302,10 @@ public class CIFSShare {
 
 		url.append("/");
 		
-		if(shareDir != null && shareDir.length() > 0) {
-			url.append(shareDir);
+		if(shareName != null && shareName.length() > 0) {
+			url.append(shareName);
 			
-			if(!shareDir.endsWith("/")) {
+			if(!shareName.endsWith("/")) {
 				url.append("/");
 			}
 		}
@@ -344,7 +341,8 @@ public class CIFSShare {
 			InputStream in = filePath.read();
 			
 			OutputStream out = remoteFile.getOutputStream();
-			byte[] data = new byte[1024 * 1024]; // should make this a global parameter or something
+			// TODO: should make the buffer size a parameter or something
+			byte[] data = new byte[8192]; 
 			int read = 0;
 			while((read = in.read(data)) > 0) {
 				out.write(data, 0, read);
@@ -352,7 +350,6 @@ public class CIFSShare {
 			out.close();
 			in.close();
 		}
-
 	}
 	
 	/**
