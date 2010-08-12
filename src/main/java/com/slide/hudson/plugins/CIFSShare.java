@@ -27,7 +27,7 @@ public class CIFSShare {
 
 	/** The Constant DEFAULT_CIFS_PORT. */
 	private static final int DEFAULT_SMB_PORT = 445;
-	
+
 	/** The server. */
 	private String server;
 
@@ -42,7 +42,7 @@ public class CIFSShare {
 
 	/** The password. */
 	private String password;
-	
+
 	/** The login domain */
 	private String domain;
 
@@ -59,22 +59,22 @@ public class CIFSShare {
 	/**
 	 * Instantiates a new FTP site.
 	 * 
-	 * @param hostname
-	 *          the hostname
+	 * @param server
+	 *            the server
 	 * @param port
-	 *          the port
+	 *            the port
 	 * @param timeOut
-	 *          the time out
+	 *            the time out
 	 * @param username
-	 *          the username
+	 *            the username
 	 * @param password
-	 *          the password
+	 *            the password
 	 * @param domain
-	 * 			the domain         
+	 *            the domain
 	 * @param cifsDir
-	 *          the cifs dir
+	 *            the cifs dir
 	 */
-	public CIFSShare(String server, int port, int timeOut, String username, 
+	public CIFSShare(String server, int port, int timeOut, String username,
 			String password, String domain, String cifsDir) {
 		this.server = server;
 		this.port = port;
@@ -88,19 +88,21 @@ public class CIFSShare {
 	/**
 	 * Instantiates a new CIFS share.
 	 * 
-	 * @param hostname
-	 *          the hostname
+	 * @param server
+	 *            the server
 	 * @param port
-	 *          the port
+	 *            the port
 	 * @param timeOut
-	 *          the time out
+	 *            the time out
 	 * @param username
-	 *          the username
+	 *            the username
 	 * @param password
-	 *          the password
+	 *            the password
+	 * @param domain
+	 *            the domain
 	 */
-	public CIFSShare(String server, String port, String timeOut, String username, 
-			String password, String domain) {
+	public CIFSShare(String server, String port, String timeOut,
+			String username, String password, String domain) {
 		this.server = server;
 		try {
 			this.port = Integer.parseInt(port);
@@ -126,7 +128,7 @@ public class CIFSShare {
 	 * Sets the time out.
 	 * 
 	 * @param timeOut
-	 *          the new time out
+	 *            the new time out
 	 */
 	public void setTimeOut(int timeOut) {
 		this.timeOut = timeOut;
@@ -145,7 +147,7 @@ public class CIFSShare {
 	 * Sets the hostname.
 	 * 
 	 * @param hostname
-	 *          the new hostname
+	 *            the new hostname
 	 */
 	public void setServer(String server) {
 		this.server = server.trim();
@@ -164,7 +166,7 @@ public class CIFSShare {
 	 * Sets the port.
 	 * 
 	 * @param port
-	 *          the new port
+	 *            the new port
 	 */
 	public void setPort(String port) {
 		if (port != null) {
@@ -200,7 +202,7 @@ public class CIFSShare {
 	 * Sets the username.
 	 * 
 	 * @param username
-	 *          the new username
+	 *            the new username
 	 */
 	public void setUsername(String username) {
 		this.username = username.trim();
@@ -219,23 +221,26 @@ public class CIFSShare {
 	 * Sets the password.
 	 * 
 	 * @param password
-	 *          the new password
+	 *            the new password
 	 */
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
+
 	/**
 	 * Gets the domain portion of the URL.
+	 * 
 	 * @return the domain of the share login
 	 */
 	public String getDomain() {
 		return domain;
 	}
-	
+
 	/**
 	 * Sets the domain portion of the URL.
-	 * @param domain the domain for the share login
+	 * 
+	 * @param domain
+	 *            the domain for the share login
 	 */
 	public void setDomain(String domain) {
 		this.domain = domain.trim();
@@ -254,67 +259,70 @@ public class CIFSShare {
 	 * Sets the share dir.
 	 * 
 	 * @param shareName
-	 *          the new share dir
+	 *            the new share dir
 	 */
-	public void setShareName(String shareName) {		
-		while(shareName.startsWith("/") && shareName.length() > 1) {
+	public void setShareName(String shareName) {
+		while (shareName.startsWith("/") && shareName.length() > 1) {
 			shareName = shareName.substring(1);
 		}
 		this.shareName = shareName.trim();
 	}
-	
+
 	/**
 	 * Gets the FULL URL for the share including escaped password.
+	 * 
 	 * @return The FULL URL for the share, including password.
 	 */
 	public String getUrl() {
 		return getUrl(true);
 	}
-	
+
 	/**
-	 * Gets the URL corresponding to this share with 
-	 * optional password.
-	 * @param withPassword true if password should be included.
+	 * Gets the URL corresponding to this share with optional password.
+	 * 
+	 * @param withPassword
+	 *            true if password should be included.
 	 * @return The URL representation of the share.
 	 */
 	private String getUrl(boolean withPassword) {
 		StringBuffer url = new StringBuffer("smb://");
-		
-		if(username != null && username.length() > 0) {			
-			if(domain != null && domain.length() > 0) {
-				url.append(Util.rawEncode(domain) + ";");		
+
+		if (username != null && username.length() > 0) {
+			if (domain != null && domain.length() > 0) {
+				url.append(Util.rawEncode(domain) + ";");
 			}
-			
+
 			url.append(Util.rawEncode(username));
-			
-			if(withPassword && password != null && password.length() > 0) {
-				url.append(":" + Util.rawEncode(password));				
-			} 
-			
+
+			if (withPassword && password != null && password.length() > 0) {
+				url.append(":" + Util.rawEncode(password));
+			}
+
 			url.append("@");
 		}
-		
+
 		url.append(server);
-		
-		if(port > 0 && port != DEFAULT_SMB_PORT) {
+
+		if (port > 0 && port != DEFAULT_SMB_PORT) {
 			url.append(":" + port);
 		}
 
 		url.append("/");
-		
-		if(shareName != null && shareName.length() > 0) {
+
+		if (shareName != null && shareName.length() > 0) {
 			url.append(shareName);
-			
-			if(!shareName.endsWith("/")) {
+
+			if (!shareName.endsWith("/")) {
 				url.append("/");
 			}
 		}
-		
+
 		return url.toString();
 	}
-	
+
 	/**
 	 * Gets the display safe (no password) URL for the share.
+	 * 
 	 * @return The display safe URL for the share.
 	 */
 	public String getDisplayUrl() {
@@ -324,7 +332,9 @@ public class CIFSShare {
 	/**
 	 * Uploads a file (or multiple files) to the share defined by this object.
 	 */
-	public void upload(FilePath filePath, String destDir, Map<String, String> envVars, PrintStream logger) throws IOException, InterruptedException {
+	public void upload(FilePath filePath, String destDir,
+			Map<String, String> envVars, PrintStream logger)
+			throws IOException, InterruptedException {
 		if (filePath.isDirectory()) {
 			FilePath[] subfiles = filePath.list("**/*");
 			if (subfiles != null) {
@@ -333,44 +343,44 @@ public class CIFSShare {
 				}
 			}
 		} else {
-			String localfilename = filePath.getName();	
-		
-			SmbFile remoteFile = new SmbFile(new SmbFile(new SmbFile(
-					getUrl()), destDir), localfilename);
+			String localfilename = filePath.getName();
+
+			if (!destDir.endsWith("/"))
+				destDir += "/";
+			SmbFile remoteFile = new SmbFile(new SmbFile(new SmbFile(getUrl()),
+					destDir), localfilename);
 
 			InputStream in = filePath.read();
-			
 			OutputStream out = remoteFile.getOutputStream();
 			// TODO: should make the buffer size a parameter or something
-			byte[] data = new byte[8192]; 
+			byte[] data = new byte[8192];
 			int read = 0;
-			while((read = in.read(data)) > 0) {
+			while ((read = in.read(data)) > 0) {
 				out.write(data, 0, read);
 			}
 			out.close();
 			in.close();
 		}
 	}
-	
+
 	/**
 	 * Mkdirs.
 	 * 
 	 * @param filePath
-	 *          the file path
+	 *            the file path
 	 * @param logger
-	 *          the logger
+	 *            the logger
 	 * 
 	 * @throws SftpException
-	 *           the sftp exception
+	 *             the sftp exception
 	 * @throws IOException
-	 *           Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred.
 	 */
 	public void mkdirs(String filePath, PrintStream logger) throws IOException {
 		SmbFile current = new SmbFile(new SmbFile(getUrl()), filePath);
-		if(!current.exists()) {
+		if (!current.exists()) {
 			logger.println("creating " + getDisplayUrl() + filePath);
 			current.mkdirs();
 		}
 	}
-}
-;
+};

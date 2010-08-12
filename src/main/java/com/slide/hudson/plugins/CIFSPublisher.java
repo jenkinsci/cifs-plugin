@@ -34,15 +34,15 @@ import org.kohsuke.stapler.StaplerRequest;
 
 /**
  * <p>
- * This class implements the ftp publisher process by using the {@link FTPSite}.
+ * This class implements the CIFS publisher process by using the {@link CIFSShare}.
  * </p>
  * <p>
- * HeadURL: $HeadURL: http://z-bld-02:8080/zxdev/zxant_test_environment/trunk/formatting/codeTemplates.xml $<br />
- * Date: $Date: 2008-04-22 11:53:34 +0200 (Di, 22 Apr 2008) $<br />
- * Revision: $Revision: 2451 $<br />
+ * HeadURL: $HeadURL$<br />
+ * Date: $Date$<br />
+ * Revision: $Revision$<br />
  * </p>
  * 
- * @author $Author: ZANOX-COM\fit $
+ * @author $Author:$
  * 
  */
 public class CIFSPublisher extends Notifier {
@@ -56,37 +56,39 @@ public class CIFSPublisher extends Notifier {
 	private String shareName;
 	private final List<Entry> entries = new ArrayList<Entry>();
 	private String winsServer;
-	
-	//private Boolean flatten = true;
 
-//	public void setFlatten(boolean flatten) {
-//		this.flatten = flatten;
-//	}
-//
-//	public boolean isFlatten() {
-//		return flatten;
-//	}
-	
+	// private Boolean flatten = true;
+
+	// public void setFlatten(boolean flatten) {
+	// this.flatten = flatten;
+	// }
+	//
+	// public boolean isFlatten() {
+	// return flatten;
+	// }
+
 	public void setWinsServer(String winsServer) {
 		this.winsServer = winsServer;
 	}
 
 	public CIFSPublisher() {
-		
+
 	}
 
 	/**
-	 * The constructor which take a configured ftp site name to publishing the artifacts.
+	 * The constructor which take a configured CIFS share name to publishing the
+	 * artifacts.
 	 * 
-	 * @param siteName
-	 *          the name of the ftp site configuration to use
+	 * @param shareName
+	 *            the name of the CIFS share configuration to use
 	 */
 	public CIFSPublisher(String shareName) {
 		this.shareName = shareName;
 	}
 
 	/**
-	 * The getter for the entries field. (this field is set by the UI part of this plugin see config.jelly file)
+	 * The getter for the entries field. (this field is set by the UI part of
+	 * this plugin see config.jelly file)
 	 * 
 	 * @return the value of the entries field
 	 */
@@ -95,10 +97,11 @@ public class CIFSPublisher extends Notifier {
 	}
 
 	/**
-	 * This method returns the configured FTPSite object which match the siteName of the FTPPublisher instance. (see Manage Hudson and System
-	 * Configuration point FTP)
+	 * This method returns the configured CIFSShare object which match the
+	 * siteName of the CIFSPublicher instance. (see Manage Hudson and System
+	 * Configuration point CIFS)
 	 * 
-	 * @return the matching FTPSite or null
+	 * @return the matching CIFSShare or null
 	 */
 	public CIFSShare getShare() {
 		CIFSShare[] shares = DESCRIPTOR.getShares();
@@ -124,15 +127,18 @@ public class CIFSPublisher extends Notifier {
 	 * @param build
 	 * @param launcher
 	 * @param listener
-	 * @return
+	 * @return true on success, false otherwise
 	 * @throws InterruptedException
 	 * @throws IOException
-	 *           {@inheritDoc}
-	 * @see hudson.tasks.BuildStep#perform(hudson.model.Build, hudson.Launcher, hudson.model.BuildListener)
+	 *             {@inheritDoc}
+	 * @see hudson.tasks.BuildStep#perform(hudson.model.Build, hudson.Launcher,
+	 *      hudson.model.BuildListener)
 	 */
 	@Override
-	public boolean perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener) throws InterruptedException, IOException {
-		if (build.getResult() == Result.FAILURE || build.getResult() == Result.ABORTED) {
+	public boolean perform(AbstractBuild<?, ?> build, Launcher launcher,
+			BuildListener listener) throws InterruptedException, IOException {
+		if (build.getResult() == Result.FAILURE
+				|| build.getResult() == Result.ABORTED) {
 			// build failed. don't post
 			return true;
 		}
@@ -141,10 +147,10 @@ public class CIFSPublisher extends Notifier {
 		try {
 			share = getShare();
 			listener.getLogger().println("Connecting to " + share.getServer());
-			
+
 			EntryCopier copier = new EntryCopier(build, listener, share);
-			
-			if(winsServer != null && winsServer.length() > 0) {
+
+			if (winsServer != null && winsServer.length() > 0) {
 				System.setProperty("jcifs.netbios.wins", winsServer);
 			}
 
@@ -159,7 +165,7 @@ public class CIFSPublisher extends Notifier {
 		} catch (Throwable th) {
 			th.printStackTrace(listener.error("Failed to upload files"));
 			build.setResult(Result.UNSTABLE);
-		} 
+		}
 
 		return true;
 	}
@@ -169,10 +175,11 @@ public class CIFSPublisher extends Notifier {
 	 * This class holds the metadata for the FTPPublisher.
 	 * </p>
 	 * 
-	 * @author $Author: ZANOX-COM\fit $
+	 * @author $Author$
 	 * @see Descriptor
 	 */
-	public static final class DescriptorImpl extends BuildStepDescriptor<Publisher> {
+	public static final class DescriptorImpl extends
+			BuildStepDescriptor<Publisher> {
 
 		private final CopyOnWriteList<CIFSShare> shares = new CopyOnWriteList<CIFSShare>();
 
@@ -185,7 +192,8 @@ public class CIFSPublisher extends Notifier {
 		}
 
 		/**
-		 * The name of the plugin to display them on the project configuration web page.
+		 * The name of the plugin to display them on the project configuration
+		 * web page.
 		 * 
 		 * {@inheritDoc}
 		 * 
@@ -216,26 +224,32 @@ public class CIFSPublisher extends Notifier {
 		}
 
 		/**
-		 * This method is called by hudson if the user has clicked the add button of the CIFS share hosts point in the System Configuration
-		 * web page. It's create a new instance of the {@link CIFSPublisher} class and added all configured CIFS shares to this instance by calling
-		 * the method {@link CIFSPublisher#getEntries()} and on it's return value the addAll method is called.
+		 * This method is called by hudson if the user has clicked the add
+		 * button of the CIFS share hosts point in the System Configuration web
+		 * page. It's create a new instance of the {@link CIFSPublisher} class
+		 * and added all configured CIFS shares to this instance by calling the
+		 * method {@link CIFSPublisher#getEntries()} and on it's return value
+		 * the addAll method is called.
 		 * 
 		 * {@inheritDoc}
 		 * 
 		 * @param req
-		 *          {@inheritDoc}
+		 *            {@inheritDoc}
 		 * @return {@inheritDoc}
 		 * @see hudson.model.Descriptor#newInstance(org.kohsuke.stapler.StaplerRequest)
 		 */
 		@Override
 		public Publisher newInstance(StaplerRequest req, JSONObject formData) {
 			CIFSPublisher pub = new CIFSPublisher();
-			pub.setWinsServer(formData.getString("winsServer"));
-			//pub.setFlatten(formData.getBoolean("flatten"));
-			//pub.setUseTimestamps(formData.getBoolean("useTimestamps"));
+			if (formData.containsKey("winsServer")) {
+				pub.setWinsServer(formData.getString("winsServer"));
+			}
+			// pub.setFlatten(formData.getBoolean("flatten"));
+			// pub.setUseTimestamps(formData.getBoolean("useTimestamps"));
 			req.bindParameters(pub, "publisher.");
 			req.bindParameters(pub, "cifs.");
-			pub.getEntries().addAll(req.bindParametersToList(Entry.class, "cifs.entry."));
+			pub.getEntries().addAll(
+					req.bindParametersToList(Entry.class, "cifs.entry."));
 			return pub;
 		}
 
@@ -258,45 +272,51 @@ public class CIFSPublisher extends Notifier {
 		 * {@inheritDoc}
 		 * 
 		 * @param req
-		 *          {@inheritDoc}
+		 *            {@inheritDoc}
 		 * @return {@inheritDoc}
 		 * @see hudson.model.Descriptor#configure(org.kohsuke.stapler.StaplerRequest)
 		 */
 		@Override
 		public boolean configure(StaplerRequest req, JSONObject formData) {
-			shares.replaceBy(req.bindParametersToList(CIFSShare.class, "cifs."));
+			shares
+					.replaceBy(req.bindParametersToList(CIFSShare.class,
+							"cifs."));
 			save();
 			return true;
 		}
-		
+
 		/**
-		 * This method validates the current entered CIFS configuration data. That is made by create a CIFS connection.
+		 * This method validates the current entered CIFS configuration data.
+		 * That is made by create a CIFS connection.
 		 * 
 		 * @param request
-		 *          the current {@link javax.servlet.http.HttpServletRequest}
+		 *            the current {@link javax.servlet.http.HttpServletRequest}
 		 */
 		public FormValidation doLoginCheck(StaplerRequest request) {
 			String server = Util.fixEmpty(request.getParameter("server"));
-			String domain = Util.fixEmptyAndTrim(request.getParameter("domain"));
+			String domain = Util
+					.fixEmptyAndTrim(request.getParameter("domain"));
 			String user = Util.fixEmptyAndTrim(request.getParameter("user"));
-			String password = Util.fixEmptyAndTrim(request.getParameter("pass"));
-			
+			String password = Util
+					.fixEmptyAndTrim(request.getParameter("pass"));
+
 			if (server == null) { // server is not entered yet
 				return FormValidation.ok();
 			}
-			
-			CIFSShare share = new CIFSShare(server, request.getParameter("port"), request.getParameter("timeOut"), user,
-			    password, domain);
+
+			CIFSShare share = new CIFSShare(server, request
+					.getParameter("port"), request.getParameter("timeOut"),
+					user, password, domain);
 			share.setShareName(request.getParameter("shareDir"));
 			try {
-				NtlmPasswordAuthentication auth = new NtlmPasswordAuthentication(domain, 
-						user, password);
-				
+				NtlmPasswordAuthentication auth = new NtlmPasswordAuthentication(
+						domain, user, password);
+
 				SmbFile serv = new SmbFile(share.getUrl());
-				
-				if(serv.exists()) {
+
+				if (serv.exists()) {
 					SmbFile file = new SmbFile(share.getUrl(), auth);
-					if(file.exists() && file.isFile()) {
+					if (file.exists() && file.isFile()) {
 						return FormValidation.error("Destination is a file");
 					} else {
 						return FormValidation.ok();

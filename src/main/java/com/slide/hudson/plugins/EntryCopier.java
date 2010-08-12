@@ -17,8 +17,8 @@ public class EntryCopier {
 	private URI workSpaceDir;
 	private CIFSShare cifsShare;
 
-	public EntryCopier(AbstractBuild<?, ?> build, BuildListener listener, CIFSShare cifsShare)
-	    throws IOException, InterruptedException {
+	public EntryCopier(AbstractBuild<?, ?> build, BuildListener listener,
+			CIFSShare cifsShare) throws IOException, InterruptedException {
 		this.build = build;
 		this.listener = listener;
 		this.cifsShare = cifsShare;
@@ -35,17 +35,14 @@ public class EntryCopier {
 		FilePath tmp = new FilePath(build.getWorkspace(), expanded);
 
 		if (tmp.exists() && tmp.isDirectory()) { // Directory
-
 			sourceFiles = tmp.list("**/*");
 			baseSourceDir = tmp.toURI().normalize().getPath();
-			listener.getLogger().println("Preparing to copy directory : " + baseSourceDir);
-
+			listener.getLogger().println(
+					"Preparing to copy directory : " + baseSourceDir);
 		} else { // Files
-			
 			sourceFiles = build.getWorkspace().list(expanded);
 			baseSourceDir = workSpaceDir.getPath();
 			listener.getLogger().println(workSpaceDir);
-			
 		}
 
 		if (sourceFiles.length == 0) { // Nothing
@@ -57,15 +54,17 @@ public class EntryCopier {
 
 		// prepare common destination
 		String subRoot = Util.replaceMacro(entry.filePath, envVars);
-		
+
 		cifsShare.mkdirs(subRoot, listener.getLogger());
-		
+
 		for (FilePath sourceFile : sourceFiles) {
-			cifsShare.upload(sourceFile, subRoot, envVars, listener.getLogger());
+			cifsShare
+					.upload(sourceFile, subRoot, envVars, listener.getLogger());
 			fileCount++;
 		}
 
-		listener.getLogger().println("transferred " + fileCount + " files to " + subRoot);
+		listener.getLogger().println(
+				"transferred " + fileCount + " files to " + subRoot);
 		return fileCount;
 	}
 }
