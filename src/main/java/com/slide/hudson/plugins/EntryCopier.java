@@ -1,8 +1,8 @@
 package com.slide.hudson.plugins;
 
 import java.io.IOException;
+
 import java.net.URI;
-import java.text.SimpleDateFormat;
 import java.util.Map;
 
 import hudson.FilePath;
@@ -28,7 +28,7 @@ public class EntryCopier {
 
 	public int copy(Entry entry) throws IOException, InterruptedException {
 		// prepare sources
-		String expanded = Util.replaceMacro(entry.sourceFile, envVars);
+		String expanded = Util.replaceMacro(entry.getSourceFile(), envVars);
 		FilePath[] sourceFiles = null;
 		String baseSourceDir = workSpaceDir.getPath();
 
@@ -53,18 +53,59 @@ public class EntryCopier {
 		int fileCount = 0;
 
 		// prepare common destination
-		String subRoot = Util.replaceMacro(entry.filePath, envVars);
+		String subRoot = Util.replaceMacro(entry.getFilePath(), envVars);
 
 		cifsShare.mkdirs(subRoot, listener.getLogger());
 
 		for (FilePath sourceFile : sourceFiles) {
-			cifsShare
-					.upload(sourceFile, subRoot, envVars, listener.getLogger());
-			fileCount++;
+			fileCount += copyFile(entry, sourceFile, subRoot, baseSourceDir);
 		}
 
 		listener.getLogger().println(
 				"transferred " + fileCount + " files to " + subRoot);
 		return fileCount;
 	}
+
+	public int copyFile(Entry entry, FilePath sourceFile, String destDir,
+			String baseSourceDir) throws IOException, InterruptedException {
+
+		String subRoot = destDir;
+		cifsShare.mkdirs(subRoot, listener.getLogger());
+
+		// make flatten backwards compatible
+		boolean flatten = entry.getFlatten();
+		if (!flatten) {
+			if (!destDir.endsWith("/")) {
+				destDir += "/";
+			}
+
+			String relDir = getRelativeToCopyBaseDirectory(baseSourceDir,
+					sourceFile);
+			if (relDir.startsWith("/")) {
+				relDir = relDir.substring(1);
+			}
+
+			subRoot = destDir + relDir;
+			cifsShare.mkdirs(subRoot, listener.getLogger());
+		}
+
+		// and upload the file in the root or subdir
+		return cifsShare.upload(sourceFile, subRoot, envVars, 
+				listener.getLogger());
+	}
+
+	private String getRelativeToCopyBaseDirectory(String baseDir,
+			FilePath sourceFile) throws IOException, InterruptedException {
+
+		URI sourceFileURI = sourceFile.toURI().normalize();
+		String relativeSourceFile = sourceFileURI.getPath().replaceFirst(
+				baseDir, "");
+		int lastSlashIndex = relativeSourceFile.lastIndexOf("/");
+		if (lastSlashIndex == -1) {
+			return ".";
+		} else {
+			return relativeSourceFile.substring(0, lastSlashIndex);
+		}
+	}
+
 }

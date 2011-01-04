@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.jvnet.hudson.plugins</groupId>
 		<artifactId>plugin</artifactId>
-		<version>1.319</version>
+		<version>1.386</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
@@ -47,5 +47,10 @@
 			</plugin>
 		</plugins>
 	</build>
+	
+   <scm>
+       <connection>scm:git:git://github.com/hudson/cifs-plugin.git</connection>
+       <developerConnection>scm:git:git@github.com:hudson/cifs-plugin.git</developerConnection>
+   </scm>
 </project>
 

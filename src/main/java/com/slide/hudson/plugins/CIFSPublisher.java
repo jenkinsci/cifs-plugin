@@ -1,7 +1,6 @@
 package com.slide.hudson.plugins;
 
 import hudson.Extension;
-import hudson.FilePath;
 import hudson.Launcher;
 import hudson.Util;
 import hudson.model.AbstractBuild;
@@ -17,20 +16,20 @@ import hudson.util.CopyOnWriteList;
 import hudson.util.FormValidation;
 
 import java.io.IOException;
-import java.net.URI;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import net.sf.json.JSONObject;
 
-import jcifs.smb.NtlmAuthenticator;
 import jcifs.smb.NtlmPasswordAuthentication;
 import jcifs.smb.SmbFile;
 
 import org.kohsuke.stapler.StaplerRequest;
+
+import com.slide.hudson.plugins.Entry;
+import com.slide.hudson.plugins.EntryCopier;
+import com.slide.hudson.plugins.CIFSShare;
 
 /**
  * <p>
@@ -55,24 +54,13 @@ public class CIFSPublisher extends Notifier {
 
 	private String shareName;
 	private final List<Entry> entries = new ArrayList<Entry>();
-	private String winsServer;
-
-	// private Boolean flatten = true;
-
-	// public void setFlatten(boolean flatten) {
-	// this.flatten = flatten;
-	// }
-	//
-	// public boolean isFlatten() {
-	// return flatten;
-	// }
+	private String winsServer;	
 
 	public void setWinsServer(String winsServer) {
 		this.winsServer = winsServer;
 	}
 
 	public CIFSPublisher() {
-
 	}
 
 	/**
@@ -149,13 +137,11 @@ public class CIFSPublisher extends Notifier {
 			listener.getLogger().println("Connecting to " + share.getServer());
 
 			EntryCopier copier = new EntryCopier(build, listener, share);
-
 			if (winsServer != null && winsServer.length() > 0) {
 				System.setProperty("jcifs.netbios.wins", winsServer);
 			}
 
 			int copied = 0;
-
 			for (Entry e : entries) {
 				copied += copier.copy(e);
 			}
@@ -244,12 +230,11 @@ public class CIFSPublisher extends Notifier {
 			if (formData.containsKey("winsServer")) {
 				pub.setWinsServer(formData.getString("winsServer"));
 			}
-			// pub.setFlatten(formData.getBoolean("flatten"));
-			// pub.setUseTimestamps(formData.getBoolean("useTimestamps"));
 			req.bindParameters(pub, "publisher.");
 			req.bindParameters(pub, "cifs.");
+			
 			pub.getEntries().addAll(
-					req.bindParametersToList(Entry.class, "cifs.entry."));
+					req.bindJSONToList(Entry.class, formData.get("e")));
 			return pub;
 		}
 

@@ -332,14 +332,16 @@ public class CIFSShare {
 	/**
 	 * Uploads a file (or multiple files) to the share defined by this object.
 	 */
-	public void upload(FilePath filePath, String destDir,
+	public int upload(FilePath filePath, String destDir,
 			Map<String, String> envVars, PrintStream logger)
-			throws IOException, InterruptedException {
+			throws IOException, InterruptedException {		
+		int uploadCount = 0;
 		if (filePath.isDirectory()) {
 			FilePath[] subfiles = filePath.list("**/*");
 			if (subfiles != null) {
 				for (int i = 0; i < subfiles.length; i++) {
-					upload(subfiles[i], destDir, envVars, logger);
+					uploadCount += 
+						upload(subfiles[i], destDir, envVars, logger);
 				}
 			}
 		} else {
@@ -347,11 +349,12 @@ public class CIFSShare {
 
 			if (!destDir.endsWith("/"))
 				destDir += "/";
-			SmbFile remoteFile = new SmbFile(new SmbFile(new SmbFile(getUrl()),
-					destDir), localfilename);
+			SmbFile remoteFile = new SmbFile(new SmbFile(
+					new SmbFile(getUrl()), destDir), localfilename);
 
 			InputStream in = filePath.read();
 			OutputStream out = remoteFile.getOutputStream();
+			
 			// TODO: should make the buffer size a parameter or something
 			byte[] data = new byte[8192];
 			int read = 0;
@@ -360,7 +363,9 @@ public class CIFSShare {
 			}
 			out.close();
 			in.close();
+			uploadCount = 1;
 		}
+		return uploadCount;
 	}
 
 	/**
