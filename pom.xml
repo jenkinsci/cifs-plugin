@@ -68,7 +68,7 @@
 	</build>
 	
    <scm>
-       <connection>scm:git:git://github.com/hudson/cifs-plugin.git</connection>
+       <connection>scm:git:https://github.com/hudson/cifs-plugin.git</connection>
        <developerConnection>scm:git:git@github.com:hudson/cifs-plugin.git</developerConnection>
        <url>http://github.com/hudson/cifs-plugin.git</url>
    </scm>
