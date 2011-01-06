@@ -12,7 +12,7 @@
   <artifactId>cifs</artifactId>
   <packaging>hpi</packaging>
   <name>CIFS publisher plugin</name>
-  <version>1.1.9-SNAPSHOT</version>
+  <version>1.1.9</version>
   <description>Make it possible to upload artifacts and other
   resources to a CIFS server.</description>
   <url>
