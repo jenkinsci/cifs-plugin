@@ -1,3 +1,25 @@
+/*
+Copyright (c) 2011 Alex Earl, Christian Knuechel
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+*/
+
 package com.slide.hudson.plugins;
 
 import hudson.FilePath;
@@ -13,15 +35,10 @@ import jcifs.smb.SmbFile;
 
 /**
  * <p>
- * This class
- * </p>
- * <p>
- * HeadURL: $HeadURL$<br />
- * Date: $Date$<br />
- * Revision: $Revision$<br />
+ * Encapsulates the information for a single CIFS share
  * </p>
  * 
- * @author $Author$
+ * @author Alex Earl
  */
 public class CIFSShare {
 
@@ -386,6 +403,15 @@ public class CIFSShare {
 		if (!current.exists()) {
 			logger.println("creating " + getDisplayUrl() + filePath);
 			current.mkdirs();
+		}
+	}
+
+	public void delete(String filePath, PrintStream logger) throws IOException {
+		SmbFile current = new SmbFile(new SmbFile(getUrl()), filePath);
+		if(current.exists()) {
+			logger.println("deleting " + getDisplayUrl() + filePath);
+			current.delete();
+
 		}
 	}
 };
