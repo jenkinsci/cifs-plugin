@@ -3,9 +3,9 @@
   <j:set var="helpURL" value="/plugin/cifspublisher" />
   
   <f:entry title="CIFS Share">
-    <select class="setting-input" name="cifs.shareName" description="Select configured CIFS share. Check global hudson config for defining connection properties for shares">
+    <select class="setting-input" name="cifs.shareUrl" description="Select configured CIFS share. Check global hudson config for defining connection properties for shares">
       <j:forEach var="s" items="${descriptor.shares}">
-        <f:option selected="${s.displayUrl==instance.displayUrl}">${s.displayUrl}</f:option>
+        <f:option selected="${s.displayUrl==instance.shareDisplayUrl}">${s.displayUrl}</f:option>
       </j:forEach>
     </select>
   </f:entry>

@@ -70,7 +70,7 @@ public class CIFSPublisher extends Notifier {
 	@Extension
 	public static final DescriptorImpl DESCRIPTOR = new DescriptorImpl();
 
-	private String shareName;
+	private String shareUrl;
 	private final List<Entry> entries = new ArrayList<Entry>();
 	private String winsServer;	
 
@@ -85,11 +85,11 @@ public class CIFSPublisher extends Notifier {
 	 * The constructor which take a configured CIFS share name to publishing the
 	 * artifacts.
 	 * 
-	 * @param shareName
+	 * @param shareUrl
 	 *            the name of the CIFS share configuration to use
 	 */
-	public CIFSPublisher(String shareName) {
-		this.shareName = shareName;
+	public CIFSPublisher(String shareUrl) {
+		this.shareUrl = shareUrl;
 	}
 
 	/**
@@ -104,25 +104,37 @@ public class CIFSPublisher extends Notifier {
 
 	/**
 	 * This method returns the configured CIFSShare object which match the
-	 * siteName of the CIFSPublicher instance. (see Manage Hudson and System
+	 * siteName of the CIFSPublisher instance. (see Manage Hudson and System
 	 * Configuration point CIFS)
 	 * 
 	 * @return the matching CIFSShare or null
 	 */
 	public CIFSShare getShare() {
 		CIFSShare[] shares = DESCRIPTOR.getShares();
-		if (shareName == null && shares.length > 0) {
+		if (shareUrl == null && shares.length > 0) {
 			// default
 			return shares[0];
 		}
 		for (CIFSShare share : shares) {
-			if (share.getServer().equals(shareName)) {
+			if (share.getDisplayUrl().equals(shareUrl)) {
 				return share;
 			}
 		}
 		return null;
 	}
 
+	public String getShareDisplayUrl() {
+		CIFSShare share = getShare();
+		if(share != null) {
+			return share.getDisplayUrl();
+		}
+		return "";
+	}
+
+	public void setShareUrl(String shareUrl) {
+		this.shareUrl = shareUrl;
+	}
+		
 	public BuildStepMonitor getRequiredMonitorService() {
 		return BuildStepMonitor.BUILD;
 	}
@@ -231,7 +243,7 @@ public class CIFSPublisher extends Notifier {
 		 * This method is called by hudson if the user has clicked the add
 		 * button of the CIFS share hosts point in the System Configuration web
 		 * page. It's create a new instance of the {@link CIFSPublisher} class
-		 * and added all configured CIFS shares to this instance by calling the
+		 * and added all 269d CIFS shares to this instance by calling the
 		 * method {@link CIFSPublisher#getEntries()} and on it's return value
 		 * the addAll method is called.
 		 * 
@@ -248,8 +260,9 @@ public class CIFSPublisher extends Notifier {
 			if (formData.containsKey("winsServer")) {
 				pub.setWinsServer(formData.getString("winsServer"));
 			}
+
 			req.bindParameters(pub, "publisher.");
-			req.bindParameters(pub, "cifs.");
+			req.bindJSON(pub, formData);
 			
 			pub.getEntries().addAll(
 					req.bindJSONToList(Entry.class, formData.get("e")));

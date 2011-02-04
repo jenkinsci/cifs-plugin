@@ -66,7 +66,7 @@ public class CIFSShare {
 	private String domain;
 
 	/** The CIFS dir. */
-	private String shareName = "/";
+	private String dir = "/";
 
 	/**
 	 * Instantiates a new CIFS share..
@@ -90,19 +90,20 @@ public class CIFSShare {
 	 *            the password
 	 * @param domain
 	 *            the domain
-	 * @param cifsDir
+	 * @param dir
 	 *            the cifs dir
 	 */
 	@DataBoundConstructor
 	public CIFSShare(String server, int port, int timeOut, String username,
-			String password, String domain, String cifsDir) {
+			String password, String domain, String dir) {
 		this.server = server;
 		this.port = port;
 		this.timeOut = timeOut;
 		this.username = username;
 		this.password = password;
 		this.domain = domain;
-		this.shareName = cifsDir;
+		this.dir = dir;
+		System.out.println(this.getUrl(true));
 	}
 
 	/**
@@ -272,20 +273,20 @@ public class CIFSShare {
 	 * @return the SMB share dir
 	 */
 	public String getShareName() {
-		return shareName;
+		return dir;
 	}
 
 	/**
 	 * Sets the share dir.
 	 * 
-	 * @param shareName
+	 * @param dir
 	 *            the new share dir
 	 */
-	public void setShareName(String shareName) {
-		while (shareName.startsWith("/") && shareName.length() > 1) {
-			shareName = shareName.substring(1);
+	public void setShareName(String dir) {
+		while (dir.startsWith("/") && dir.length() > 1) {
+			dir = dir.substring(1);
 		}
-		this.shareName = shareName.trim();
+		this.dir = dir.trim();
 	}
 
 	/**
@@ -329,10 +330,10 @@ public class CIFSShare {
 
 		url.append("/");
 
-		if (shareName != null && shareName.length() > 0) {
-			url.append(shareName);
+		if (dir != null && dir.length() > 0) {
+			url.append(dir);
 
-			if (!shareName.endsWith("/")) {
+			if (!dir.endsWith("/")) {
 				url.append("/");
 			}
 		}

@@ -8,7 +8,7 @@
             <f:textbox name="cifs.server" value="${share.server}"/>
           </f:entry>          
           <f:entry title="Share Name" help="/plugin/cifspublisher/help-shareName.html">
-            <f:textbox name="cifs.shareName" value="${share.shareName}"/>
+            <f:textbox name="cifs.dir" value="${share.dir}"/>
           </f:entry>
           <f:entry title="Domain" help="/plugin/cifspublisher/help-domain.html">
           	<f:textbox name="cifs.domain" value="${share.domain}" />
@@ -50,6 +50,4 @@
 	  </f:advanced>    
     </f:entry>
   </f:section>
-
-
 </j:jelly>
