@@ -67,10 +67,10 @@
   </build>
   <scm>
     <connection>
-    scm:git:https://github.com/jenkins/cifs-plugin.git</connection>
+    scm:git:https://github.com/jenkinsci/cifs-plugin.git</connection>
     <developerConnection>
-    scm:git:git@github.com:jenkins/cifs-plugin.git</developerConnection>
-    <url>http://github.com/jenkins/cifs-plugin.git</url>
+    scm:git:git@github.com:jenkinsci/cifs-plugin.git</developerConnection>
+    <url>http://github.com/jenkinsci/cifs-plugin.git</url>
   </scm>
   <distributionManagement>
     <repository>
