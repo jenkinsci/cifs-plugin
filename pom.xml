@@ -16,7 +16,7 @@
   <description>Make it possible to upload artifacts and other
   resources to a CIFS server.</description>
   <url>
-  http://wiki.hudson-ci.org/display/HUDSON/CIFS-Publisher+Plugin</url>
+  http://wiki.jenkins-ci.org/display/HUDSON/CIFS-Publisher+Plugin</url>
   <developers>
     <developer>
       <id>slide_o_mix</id>
@@ -67,10 +67,10 @@
   </build>
   <scm>
     <connection>
-    scm:git:https://github.com/hudson/cifs-plugin.git</connection>
+    scm:git:https://github.com/jenkins/cifs-plugin.git</connection>
     <developerConnection>
-    scm:git:git@github.com:hudson/cifs-plugin.git</developerConnection>
-    <url>http://github.com/hudson/cifs-plugin.git</url>
+    scm:git:git@github.com:jenkins/cifs-plugin.git</developerConnection>
+    <url>http://github.com/jenkins/cifs-plugin.git</url>
   </scm>
   <distributionManagement>
     <repository>
