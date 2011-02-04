@@ -281,9 +281,8 @@ public class CIFSPublisher extends Notifier {
 		 */
 		@Override
 		public boolean configure(StaplerRequest req, JSONObject formData) {
-			shares
-					.replaceBy(req.bindParametersToList(CIFSShare.class,
-							"cifs."));
+			shares.replaceBy(req.bindJSONToList(CIFSShare.class,
+						formData.get("share")));
 			save();
 			return true;
 		}

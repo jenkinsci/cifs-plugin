@@ -25,6 +25,8 @@ package com.slide.hudson.plugins;
 import hudson.FilePath;
 import hudson.Util;
 
+import org.kohsuke.stapler.DataBoundConstructor;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -67,14 +69,14 @@ public class CIFSShare {
 	private String shareName = "/";
 
 	/**
-	 * Instantiates a new FTP site.
+	 * Instantiates a new CIFS share..
 	 */
 	public CIFSShare() {
 
 	}
 
 	/**
-	 * Instantiates a new FTP site.
+	 * Instantiates a new CIFS share.
 	 * 
 	 * @param server
 	 *            the server
@@ -91,6 +93,7 @@ public class CIFSShare {
 	 * @param cifsDir
 	 *            the cifs dir
 	 */
+	@DataBoundConstructor
 	public CIFSShare(String server, int port, int timeOut, String username,
 			String password, String domain, String cifsDir) {
 		this.server = server;
