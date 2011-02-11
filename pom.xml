@@ -5,10 +5,9 @@
   <parent>
     <groupId>org.jvnet.hudson.plugins</groupId>
     <artifactId>plugin</artifactId>
-    <version>1.388</version>
-    <relativePath>../pom.xml</relativePath>
+    <version>1.395</version>
   </parent>
-  <groupId>org.jvnet.hudson.plugins</groupId>
+  <groupId>org.jenkins-ci.plugins</groupId>
   <artifactId>cifs</artifactId>
   <packaging>hpi</packaging>
   <name>CIFS publisher plugin</name>
@@ -21,6 +20,7 @@
     <developer>
       <id>slide_o_mix</id>
       <name>slide</name>
+      <timezone>-7</timezone>
       <email>slide.o.mix@gmail.com</email>
     </developer>
   </developers>
@@ -65,6 +65,12 @@
       </extension>
     </extensions>
   </build>
+  <repositories>
+    <repository>
+        <id>m.g.o-public</id>
+	<url>http://maven.glassfish.org/content/groups/public/</url>
+    </repository>
+  </repositories>
   <scm>
     <connection>
     scm:git:https://github.com/jenkinsci/cifs-plugin.git</connection>
@@ -79,4 +85,10 @@
       http://maven.hudson-labs.org:8081/content/repositories/releases/</url>
     </repository>
   </distributionManagement>
+  <pluginRepositories>
+      <pluginRepository>
+        <id>m.g.o-public</id>
+	<url>http://maven.glassfish.org/content/groups/public/</url>
+      </pluginRepository>
+  </pluginRepositories>
 </project>

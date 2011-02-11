@@ -164,20 +164,23 @@ public class CIFSPublisher extends Notifier {
 		CIFSShare share = null;
 		try {
 			share = getShare();
-			listener.getLogger().println("Connecting to " + share.getServer());
+			if(share != null) {
+				listener.getLogger().println("Connecting to " + share.getServer());
 
-			EntryCopier copier = new EntryCopier(build, listener, share);
-			if (winsServer != null && winsServer.length() > 0) {
-				System.setProperty("jcifs.netbios.wins", winsServer);
+				EntryCopier copier = new EntryCopier(build, listener, share);
+				if (winsServer != null && winsServer.length() > 0) {
+					System.setProperty("jcifs.netbios.wins", winsServer);
+				}
+
+				int copied = 0;
+				for (Entry e : entries) {
+					copied += copier.copy(e);
+				}
+
+				listener.getLogger().println("Transfered " + copied + " files.");
+			} else {
+				listener.getLogger().println("Could not retrieve the selected share, please check global configuration for CIFS shares.");
 			}
-
-			int copied = 0;
-			for (Entry e : entries) {
-				copied += copier.copy(e);
-			}
-
-			listener.getLogger().println("Transfered " + copied + " files.");
-
 		} catch (Throwable th) {
 			th.printStackTrace(listener.error("Failed to upload files"));
 			build.setResult(Result.UNSTABLE);
@@ -231,7 +234,7 @@ public class CIFSPublisher extends Notifier {
 		 */
 		@Override
 		public String getHelpFile() {
-			return "/plugin/cifspublisher/help.html";
+			return "/plugin/cifs/help.html";
 		}
 
 		@Override
@@ -322,7 +325,7 @@ public class CIFSPublisher extends Notifier {
 			CIFSShare share = new CIFSShare(server, request
 					.getParameter("port"), request.getParameter("timeOut"),
 					user, password, domain);
-			share.setShareName(request.getParameter("shareDir"));
+			share.setDir(request.getParameter("shareDir"));
 			try {
 				NtlmPasswordAuthentication auth = new NtlmPasswordAuthentication(
 						domain, user, password);

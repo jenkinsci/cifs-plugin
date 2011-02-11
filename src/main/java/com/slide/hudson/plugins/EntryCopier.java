@@ -73,7 +73,6 @@ public class EntryCopier {
 		} else { // Files
 			sourceFiles = build.getWorkspace().list(expanded);
 			baseSourceDir = workSpaceDir.getPath();
-			listener.getLogger().println(workSpaceDir);
 		}
 
 		if (sourceFiles.length == 0) { // Nothing

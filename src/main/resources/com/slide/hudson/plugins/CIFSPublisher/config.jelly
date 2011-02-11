@@ -1,6 +1,6 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
 
-  <j:set var="helpURL" value="/plugin/cifspublisher" />
+  <j:set var="helpURL" value="/plugin/cifs" />
   
   <f:entry title="CIFS Share">
     <select class="setting-input" name="cifs.shareUrl" description="Select configured CIFS share. Check global hudson config for defining connection properties for shares">

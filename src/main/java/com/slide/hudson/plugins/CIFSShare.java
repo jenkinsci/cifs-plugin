@@ -103,7 +103,6 @@ public class CIFSShare {
 		this.password = password;
 		this.domain = domain;
 		this.dir = dir;
-		System.out.println(this.getUrl(true));
 	}
 
 	/**
@@ -272,7 +271,7 @@ public class CIFSShare {
 	 * 
 	 * @return the SMB share dir
 	 */
-	public String getShareName() {
+	public String getDir() {
 		return dir;
 	}
 
@@ -282,7 +281,7 @@ public class CIFSShare {
 	 * @param dir
 	 *            the new share dir
 	 */
-	public void setShareName(String dir) {
+	public void setDir(String dir) {
 		while (dir.startsWith("/") && dir.length() > 1) {
 			dir = dir.substring(1);
 		}

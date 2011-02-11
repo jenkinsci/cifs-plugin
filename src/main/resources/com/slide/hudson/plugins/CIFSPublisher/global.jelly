@@ -4,34 +4,34 @@
       description="CIFS shares that projects will want to connect to">
       <f:repeatable var="share" items="${descriptor.shares}">
         <table width="100%">
-          <f:entry title="Server" help="/plugin/cifspublisher/help-server.html">
+          <f:entry title="Server" help="/plugin/cifs/help-server.html">
             <f:textbox name="cifs.server" value="${share.server}"/>
           </f:entry>          
-          <f:entry title="Share Name" help="/plugin/cifspublisher/help-shareName.html">
+          <f:entry title="Share Name" help="/plugin/cifs/help-shareName.html">
             <f:textbox name="cifs.dir" value="${share.dir}"/>
           </f:entry>
-          <f:entry title="Domain" help="/plugin/cifspublisher/help-domain.html">
+          <f:entry title="Domain" help="/plugin/cifs/help-domain.html">
           	<f:textbox name="cifs.domain" value="${share.domain}" />
 <!--				checkMethod="post"
 				checkUrl="'${rootURL}/publisher/CIFSPublisher/loginCheck?server='+escape(Form.findMatchingInput(this,'cifs.server').value)+'&amp;port='+escape(Form.findMatchingInput(this,'cifs.port').value)+'&amp;user='+escape(Form.findMatchingInput(this,'cifs.user').value)+'&amp;pass='+escape(Form.findMatchingInput(this,'cifs.password').value)+'&amp;domain='+escape(this.value)+'&amp;shareDir='+escape(Form.findMatchingInput(this,'cifs.shareDir').value)"
 			/>          		-->
           </f:entry>
-          <f:entry title="User Name" help="/plugin/cifspublisher/help-login.html">
+          <f:entry title="User Name" help="/plugin/cifs/help-login.html">
             <f:textbox name="cifs.username" value="${share.username}" />
 <!--				checkMethod="post"
 				checkUrl="'${rootURL}/publisher/CIFSPublisher/loginCheck?server='+escape(Form.findMatchingInput(this,'cifs.server').value)+'&amp;port='+escape(Form.findMatchingInput(this,'cifs.port').value)+'&amp;user='+escape(this.value)+'&amp;pass='+escape(Form.findMatchingInput(this,'cifs.password').value)+'&amp;domain='+escape(Form.findMatchingInput(this, 'cifs.domain').value)+'&amp;shareDir='+escape(Form.findMatchingInput(this,'cifs.shareDir').value)"
 			/>-->
           </f:entry>
-          <f:entry title="Password" help="/plugin/cifspublisher/help-password.html">
+          <f:entry title="Password" help="/plugin/cifs/help-password.html">
           	<f:password 
           		name="cifs.password" value="${share.password}"/>
 <!--          		checkUrl="'${rootURL}/publisher/CIFSPublisher/loginCheck?server='+escape(Form.findMatchingInput(this,'cifs.server').value)+'&amp;port='+escape(Form.findMatchingInput(this,'cifs.port').value)+'&amp;user='+escape(Form.findMatchingInput(this,'cifs.user').value)+'&amp;pass='+escape(this.value)+'&amp;domain='+escape(Form.findMatchingInput(this, 'cifs.domain').value)+'&amp;shareDir='+escape(Form.findMatchingInput(this,'cifs.shareDir').value)"
           	/>            -->
           </f:entry>          
-          <f:entry title="Port" help="/plugin/cifspublisher/help-port.html">
+          <f:entry title="Port" help="/plugin/cifs/help-port.html">
             <f:textbox name="cifs.port" value="${share.port}"/>
           </f:entry>
-          <f:entry title="Time Out" help="/plugin/cifspublisher/help-timeout.html">
+          <f:entry title="Time Out" help="/plugin/cifs/help-timeout.html">
             <f:textbox name="cifs.timeOut" value="${share.timeOut}"/>
           </f:entry>
           <f:entry title="">
@@ -44,7 +44,7 @@
     </f:entry> 
     <f:entry title="">
     	<f:advanced>    		
-			<f:entry title="WINS Server IP" help="/plugin/cifspublisher/help-wins.html">
+			<f:entry title="WINS Server IP" help="/plugin/cifs/help-wins.html">
 				<f:textbox name="cifs.winsServer" value="${descriptor.winsServer}"/>
 			</f:entry>		
 	  </f:advanced>    
