@@ -117,7 +117,10 @@ public class EntryCopier {
 					sourceFile);
 			if (relDir.startsWith("/")) {
 				relDir = relDir.substring(1);
+			} else if(relDir.equals(".")) {
+				relDir = "";
 			}
+
 
 			subRoot = destDir + relDir;
 			cifsShare.mkdirs(subRoot, listener.getLogger());

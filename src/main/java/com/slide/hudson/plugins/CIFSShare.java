@@ -27,6 +27,7 @@ import hudson.Util;
 
 import org.kohsuke.stapler.DataBoundConstructor;
 
+import java.net.URLEncoder;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -34,6 +35,7 @@ import java.io.PrintStream;
 import java.util.Map;
 
 import jcifs.smb.SmbFile;
+import jcifs.smb.SmbException;
 
 /**
  * <p>
@@ -321,7 +323,7 @@ public class CIFSShare {
 			url.append("@");
 		}
 
-		url.append(server);
+		url.append(Util.rawEncode(server));
 
 		if (port > 0 && port != DEFAULT_SMB_PORT) {
 			url.append(":" + port);
@@ -330,7 +332,7 @@ public class CIFSShare {
 		url.append("/");
 
 		if (dir != null && dir.length() > 0) {
-			url.append(dir);
+			url.append(Util.rawEncode(dir));
 
 			if (!dir.endsWith("/")) {
 				url.append("/");
@@ -365,25 +367,40 @@ public class CIFSShare {
 				}
 			}
 		} else {
-			String localfilename = filePath.getName();
+			try {
+				String localfilename = filePath.getName();
 
-			if (!destDir.endsWith("/"))
-				destDir += "/";
-			SmbFile remoteFile = new SmbFile(new SmbFile(
-					new SmbFile(getUrl()), destDir), localfilename);
+				if (!destDir.endsWith("/"))
+					destDir += "/";
 
-			InputStream in = filePath.read();
-			OutputStream out = remoteFile.getOutputStream();
+				SmbFile remoteFile = null;
+				if(destDir.equals("/")) {
+					remoteFile = new SmbFile(
+							getUrl(true),
+							localfilename);
+				} else {
+					remoteFile = new SmbFile(
+							new SmbFile(
+								getUrl(true), destDir),
+							localfilename);
+
+				}
+
+				InputStream in = filePath.read();
+				OutputStream out = remoteFile.getOutputStream();
 			
-			// TODO: should make the buffer size a parameter or something
-			byte[] data = new byte[8192];
-			int read = 0;
-			while ((read = in.read(data)) > 0) {
-				out.write(data, 0, read);
+				// TODO: should make the buffer size a parameter or something
+				byte[] data = new byte[8192];
+				int read = 0;
+				while ((read = in.read(data)) > 0) {
+					out.write(data, 0, read);
+				}
+				out.close();
+				in.close();
+				uploadCount = 1;
+			} catch(IOException ex) {
+				logger.println("Error uploading " + filePath.toString() + " - " + ex.getMessage());
 			}
-			out.close();
-			in.close();
-			uploadCount = 1;
 		}
 		return uploadCount;
 	}
