@@ -306,24 +306,26 @@ public class CIFSShare {
 	 *            true if password should be included.
 	 * @return The URL representation of the share.
 	 */
-	private String getUrl(boolean withPassword) {
+	private String getUrl(boolean full) {
 		StringBuffer url = new StringBuffer("smb://");
 
 		if (username != null && username.length() > 0) {
 			if (domain != null && domain.length() > 0) {
-				url.append(Util.rawEncode(domain) + ";");
+				url.append(
+					(full ? Util.rawEncode(domain) : 
+					 domain) + ";");
 			}
 
-			url.append(Util.rawEncode(username));
+			url.append((full ? Util.rawEncode(username) : username));
 
-			if (withPassword && password != null && password.length() > 0) {
+			if (full && password != null && password.length() > 0) {
 				url.append(":" + Util.rawEncode(password));
 			}
 
 			url.append("@");
 		}
 
-		url.append(Util.rawEncode(server));
+		url.append(server);
 
 		if (port > 0 && port != DEFAULT_SMB_PORT) {
 			url.append(":" + port);
@@ -332,8 +334,7 @@ public class CIFSShare {
 		url.append("/");
 
 		if (dir != null && dir.length() > 0) {
-			url.append(Util.rawEncode(dir));
-
+			url.append(dir);
 			if (!dir.endsWith("/")) {
 				url.append("/");
 			}
