@@ -14,8 +14,7 @@
   <version>1.1.14</version>
   <description>Make it possible to upload artifacts and other
   resources to a CIFS server.</description>
-  <url>
-  http://wiki.jenkins-ci.org/display/HUDSON/CIFS-Publisher+Plugin</url>
+  <url>http://wiki.jenkins-ci.org/display/JENKINS/CIFS-Publisher+Plugin</url>
   <developers>
     <developer>
       <id>slide_o_mix</id>
